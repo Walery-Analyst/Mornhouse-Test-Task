@@ -1,0 +1,15 @@
+-- Var1
+
+WITH user_max_status AS (
+    -- Крок 1: Знаходимо максимальний ребіл для кожного унікального користувача
+    SELECT 
+        user_id, 
+        MAX(subscription_renewal_amount) AS max_renewals
+    FROM dataset_purchases
+    WHERE is_trial = 0  -- Тільки тріальні підписки
+    GROUP BY user_id
+)
+-- Крок 2: Рахуємо загальну суму на основі цих максимумів
+SELECT 
+    SUM(6.99 + (max_renewals * 29.99)) AS total
+FROM user_max_status;
